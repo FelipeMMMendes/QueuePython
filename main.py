@@ -1,3 +1,4 @@
+from __future__ import annotations
 from typing import Any
 #Essa biblioteca serve para auxiliar na tipagem das variaveis
 
@@ -32,7 +33,7 @@ class Queue:
         self._count = 0 #variavel flag para armazenar quantos elementos tem na fila
 
     #funcao para inserir elementos na lista
-    def push(self, nodeValue: Any) -> Node:
+    def push(self, nodeValue: Any) -> None:
         #instancia um objeto do tipo node
         newNode = Node(nodeValue)
 
@@ -53,6 +54,62 @@ class Queue:
         #acrescenta mais um na variavel no count
         self._count +=1
 
-    def pop(self) -> None:
+    def pop(self) -> Node:
+        if not self.first:
+            #tratamento de excecao personalizada
+            raise EmptyQueueError("Empty Queue")
+
+        first = self.first
+
+        #o metodo hasattr retorna TRUE se tal objeto tem o atributo dado ou retorna FALSE se tal objeto nao tem o atributo
+        #se existir o next nesse first 
+        if hasattr(self.first, 'next'):
+            self.first = self.first.next
+        else:
+            self.firts = Node(EMPTY_NODE_VALUE)
+
+        self._count -= 1
+        return first
+
+    #funcao para mostrar o primeiro elemento da lista
+    def peek(self) -> Node:
+        return self.first
+
+    #funcao para retornar o tamanho da lista
+    def __len__(self) -> int:
+        return self._count
+
+    #funcao que retorna TRUE se a lista estiver populada e FALSE se ela estiver vazia.
+    def __bool__(self) -> bool:
+        return bool(self._count)
+
+    def __iter__(self) -> Queue:
+        return self
+
+    def __next__(self) -> Any:
+        try:
+           next_value = self.pop()
+           return next_value
+        except EmptyQueueError:
+            raise StopIteration
+
+    def __repr__(self) -> str:
+        if not self.first:
+            return 'Queue()'
+        return f'Queue({self.first},{self.last})'        
+
+if __name__ == '__main__':
+    queue = Queue()
+    queue.push('A')
+    queue.push('B')
+    queue.push('C')
+    
+    
+             
+
+
+
+
+
 
         
